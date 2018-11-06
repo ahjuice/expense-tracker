@@ -1,3 +1,5 @@
+require_relative 'ledger'
+
 require 'sinatra/base'
 require 'json'
 
