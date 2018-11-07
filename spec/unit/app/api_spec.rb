@@ -60,5 +60,35 @@ module ExpenseTracker
         end
       end
     end
+
+    describe 'GET /expenses/:date' do
+      context 'when expenses exist on the given date' do
+        before do
+          allow(ledger).to receive(:expenses_on)
+            .with('1970-01-01')
+            .and_return(['expense_1', 'expense_2'])
+        end
+
+        it 'returns the expense records as JSON' do
+          get '/expenses/1970-01-01'
+
+          parse_response_and_expect(eq(['expense_1', 'expense_2']))
+        end
+
+        it 'responds with a 200 (OK)' do
+          get '/expenses/1970-01-01'
+          expect(last_response.status).to eq(200)
+        end
+      end
+
+      context 'when there are no expenses on the given date' do
+        it 'returns an empty array as JSON'
+        
+        it 'responds with a 200 (OK)' do
+          get '/expenses/1984-01-01'
+          expect(last_response.status).to eq(200)
+        end
+      end
+    end
   end
 end
