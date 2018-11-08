@@ -66,13 +66,13 @@ module ExpenseTracker
         before do
           allow(ledger).to receive(:expenses_on)
             .with('1970-01-01')
-            .and_return(['expense_1', 'expense_2'])
+            .and_return(%w[expense_1 expense_2])
         end
 
         it 'returns the expense records as JSON' do
           get '/expenses/1970-01-01'
 
-          parse_response_and_expect(eq(['expense_1', 'expense_2']))
+          parse_response_and_expect(eq(%w[expense_1 expense_2]))
         end
 
         it 'responds with a 200 (OK)' do
@@ -82,7 +82,17 @@ module ExpenseTracker
       end
 
       context 'when there are no expenses on the given date' do
-        it 'returns an empty array as JSON'
+        before do
+          allow(ledger).to receive(:expenses_on)
+            .with('1984-01-01')
+            .and_return([])
+        end
+
+        it 'returns an empty array as JSON' do
+          get '/expenses/1984-01-01'
+
+          parse_response_and_expect(eq([]))
+        end
         
         it 'responds with a 200 (OK)' do
           get '/expenses/1984-01-01'
