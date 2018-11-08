@@ -3,7 +3,11 @@ module ExpenseTracker
 
   # Records expenses entered by user
   class Ledger
-    def record(expense); end
+    def record(expense)
+      DB[:expenses].insert(expense)
+      id = DB[:expenses].max(:id)
+      RecordResult.new(true, id, nil)
+    end
 
     def expenses_on(date); end
   end

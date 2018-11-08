@@ -93,7 +93,7 @@ module ExpenseTracker
 
           parse_response_and_expect(eq([]))
         end
-        
+
         it 'responds with a 200 (OK)' do
           get '/expenses/1984-01-01'
           expect(last_response.status).to eq(200)
